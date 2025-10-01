@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart'; // Import ini sekarang akan berhasil
 import '../models/member_oop.dart';
 
 class MemberDetailScreen extends StatelessWidget {
@@ -16,10 +17,8 @@ class MemberDetailScreen extends StatelessWidget {
       body: LayoutBuilder(
         builder: (context, constraints) {
           if (constraints.maxWidth > 600) {
-            // Tampilan untuk layar lebar (PC/Tablet)
             return _buildWideLayout();
           } else {
-            // Tampilan untuk layar sempit (HP)
             return _buildNarrowLayout();
           }
         },
@@ -27,18 +26,13 @@ class MemberDetailScreen extends StatelessWidget {
     );
   }
 
-  // Widget untuk layout layar lebar
   Widget _buildWideLayout() {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Expanded(
           flex: 2,
-          child: Image.asset(
-            member.imagePath,
-            fit: BoxFit.cover,
-            height: double.infinity,
-          ),
+          child: Image.asset(member.imagePath, fit: BoxFit.cover, height: double.infinity),
         ),
         Expanded(
           flex: 3,
@@ -51,17 +45,11 @@ class MemberDetailScreen extends StatelessWidget {
     );
   }
 
-  // Widget untuk layout layar sempit
   Widget _buildNarrowLayout() {
     return SingleChildScrollView(
       child: Column(
         children: [
-          Image.asset(
-            member.imagePath,
-            fit: BoxFit.cover,
-            width: double.infinity,
-            height: 400,
-          ),
+          Image.asset(member.imagePath, fit: BoxFit.cover, width: double.infinity, height: 400),
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: _buildDetailsContent(),
@@ -71,8 +59,12 @@ class MemberDetailScreen extends StatelessWidget {
     );
   }
 
-  // Widget untuk konten biodata yang bisa digunakan di kedua layout
   Widget _buildDetailsContent() {
+    // Fungsi untuk memformat tanggal menggunakan 'intl'
+    String formatDate(DateTime date) {
+      return DateFormat('d MMMM yyyy', 'id_ID').format(date);
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -88,15 +80,13 @@ class MemberDetailScreen extends StatelessWidget {
         _buildDetailRow('Nama Lengkap', member.fullName),
         _buildDetailRow('Kewarganegaraan', member.nationality),
 
-        // Menampilkan data spesifik berdasarkan tipe objek
         if (member is Player)
           _buildDetailRow('Hero Andalan', (member as Player).signatureHeroes.join(', ')),
 
         if (member is Coach)
-          _buildDetailRow('Bergabung', (member as Coach).joinDate),
+          _buildDetailRow('Bergabung', formatDate((member as Coach).joinDate)),
 
         const SizedBox(height: 20),
-        // BAGIAN FAKTA MENARIK
         const Text(
           'Fakta Menarik',
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.yellow),
@@ -107,14 +97,11 @@ class MemberDetailScreen extends StatelessWidget {
           style: const TextStyle(fontSize: 16, color: Colors.white70, height: 1.4),
         ),
         const SizedBox(height: 20),
-
-        // BAGIAN DAFTAR JUARA (TERPISAH)
         const Text(
           'Gelar Juara Bersama ONIC',
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.yellow),
         ),
         const SizedBox(height: 10),
-        // Menampilkan daftar piala menggunakan Column
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: member.achievements.map((achievement) {
@@ -139,7 +126,6 @@ class MemberDetailScreen extends StatelessWidget {
     );
   }
 
-  // Widget bantuan untuk membuat baris detail
   Widget _buildDetailRow(String title, String value) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),

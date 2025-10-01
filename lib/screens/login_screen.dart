@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'welcome_screen.dart'; // Mengarahkan ke halaman welcome
+import 'package:shared_preferences/shared_preferences.dart';
+import 'welcome_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -11,26 +12,54 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  bool _rememberMe = false;
 
-  void _handleLogin() {
+  @override
+  void initState() {
+    super.initState();
+    _loadUserEmail();
+  }
+
+  // Fungsi untuk memuat email yang tersimpan
+  void _loadUserEmail() async {
+    final prefs = await SharedPreferences.getInstance();
+    final String? email = prefs.getString('email');
+    if (email != null) {
+      setState(() {
+        _emailController.text = email;
+        _rememberMe = true;
+      });
+    }
+  }
+
+  // Fungsi untuk menangani proses login
+  void _handleLogin() async {
     const String correctEmail = 'admin@onic.com';
     const String correctPassword = '123456';
 
     final String email = _emailController.text.trim();
     final String password = _passwordController.text.trim();
+    final prefs = await SharedPreferences.getInstance();
 
     if (email == correctEmail && password == correctPassword) {
-      // Jika benar, arahkan ke WelcomeScreen
+      // Simpan email jika "Ingat Saya" dicentang
+      if (_rememberMe) {
+        await prefs.setString('email', email);
+      } else {
+        await prefs.remove('email');
+      }
+
+      // Navigasi ke halaman selamat datang
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const WelcomeScreen()),
       );
     } else {
-      // Jika salah, tampilkan notifikasi error
       _showErrorSnackbar('Email atau Password salah, coba lagi!');
     }
   }
 
+  // Fungsi untuk menampilkan notifikasi error
   void _showErrorSnackbar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -49,13 +78,6 @@ class _LoginScreenState extends State<LoginScreen> {
         margin: const EdgeInsets.all(10),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
-    super.dispose();
   }
 
   @override
@@ -81,7 +103,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 Image.asset('assets/images/onic_logo.png', width: 120),
                 const SizedBox(height: 20),
                 const Text(
-                  "Welcome SONIC!",
+                  "Welcome SONIC",
                   style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
@@ -120,7 +142,26 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 30),
+                // Checkbox "Ingat Saya"
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: Row(
+                    children: [
+                      Checkbox(
+                        value: _rememberMe,
+                        onChanged: (value) {
+                          setState(() {
+                            _rememberMe = value!;
+                          });
+                        },
+                        checkColor: Colors.black,
+                        activeColor: Colors.yellow,
+                      ),
+                      const Text("Ingat Saya", style: TextStyle(color: Colors.white70)),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 20),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.yellow,

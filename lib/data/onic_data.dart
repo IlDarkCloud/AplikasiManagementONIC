@@ -1,5 +1,6 @@
 import '../models/member_oop.dart';
 
+// Daftar ini berisi semua data anggota tim, baik pemain maupun pelatih.
 final List<TeamMember> onicTeamMembers = [
   // --- DAFTAR PEMAIN ---
   Player(
@@ -109,7 +110,7 @@ final List<TeamMember> onicTeamMembers = [
     imagePath: 'assets/images/acil.png',
     fullName: 'Adi Syofian Asyauri',
     nationality: 'Indonesia',
-    joinDate: '28 Februari 2025',
+    joinDate: DateTime(2025, 2, 28), // Menggunakan objek DateTime
     funFact:
     'Sebelum di ONIC, ia adalah pelatih ikonik untuk tim rival RRQ. Kepindahannya ke ONIC terbukti sukses besar dan langsung memperkuat statusnya sebagai salah satu pelatih terbaik.',
     achievements: ['MPL Indonesia (S15)'],
@@ -120,7 +121,7 @@ final List<TeamMember> onicTeamMembers = [
     imagePath: 'assets/images/yeb.png',
     fullName: 'Paul Denver Lintag Miranda',
     nationality: 'Filipina',
-    joinDate: '4 Juli 2022',
+    joinDate: DateTime(2022, 7, 4), // Menggunakan objek DateTime
     funFact:
     'Arsitek di balik dinasti baru ONIC. Datang dari Filipina bersama Kairi, strategi \'drafting\'-nya yang cerdas membuatnya dijuluki "The Master General".',
     achievements: [

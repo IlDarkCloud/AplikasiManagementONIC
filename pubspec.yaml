@@ -5,13 +5,19 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.2.3 <4.0.0' # Sesuaikan dengan versi SDK Anda jika perlu
+  sdk: '>=3.0.0 <4.0.0'
 
 dependencies:
   flutter:
     sdk: flutter
 
   cupertino_icons: ^1.0.8
+
+  # getwidget telah dihapus dari sini untuk mengatasi error
+  device_info_plus: ^10.1.0
+  webview_flutter: ^4.8.0
+  shared_preferences: ^2.2.3
+  intl: ^0.19.0
 
 dev_dependencies:
   flutter_test:
@@ -20,15 +26,6 @@ dev_dependencies:
   flutter_lints: ^4.0.0
 
 flutter:
-
   uses-material-design: true
-
-  # ------------------------------------------------------------------- #
-  # BAGIAN YANG SAYA UBAH ADA DI BAWAH INI
-  # ------------------------------------------------------------------- #
-
-  # 1. Mengaktifkan folder assets untuk gambar
-  # Pastikan Anda sudah membuat folder assets/images/ di proyek Anda
   assets:
     - assets/images/
-

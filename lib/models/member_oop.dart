@@ -1,4 +1,8 @@
-// Kelas dasar yang memiliki properti umum untuk semua anggota tim.
+// File ini mendefinisikan struktur data untuk anggota tim menggunakan konsep OOP.
+
+// 1. ABSTRACT CLASS (Kelas Induk)
+// Kelas dasar yang tidak bisa dibuat objeknya secara langsung.
+// Ini adalah contoh ENCAPSULATION, membungkus data-data umum.
 abstract class TeamMember {
   final String name;
   final String ign;
@@ -6,7 +10,7 @@ abstract class TeamMember {
   final String fullName;
   final String nationality;
   final String funFact;
-  final List<String> achievements; // <-- PROPERTI BARU DITAMBAHKAN
+  final List<String> achievements;
 
   TeamMember({
     required this.name,
@@ -15,13 +19,16 @@ abstract class TeamMember {
     required this.fullName,
     required this.nationality,
     required this.funFact,
-    required this.achievements, // <-- DITAMBAHKAN DI CONSTRUCTOR
+    required this.achievements,
   });
 
+  // Metode abstrak yang WAJIB diimplementasikan oleh kelas anak.
+  // Ini adalah dasar dari POLYMORPHISM.
   String getDisplayRole();
 }
 
-// Kelas Player mewarisi dari TeamMember.
+// 2. CHILD CLASS (Kelas Anak) - Menggunakan INHERITANCE
+// Kelas Player "mewarisi" semua properti dari TeamMember.
 class Player extends TeamMember {
   final String role;
   final List<String> signatureHeroes;
@@ -33,20 +40,23 @@ class Player extends TeamMember {
     required super.fullName,
     required super.nationality,
     required super.funFact,
-    required super.achievements, // <-- DITAMBAHKAN DI CONSTRUCTOR
+    required super.achievements,
     required this.role,
     required this.signatureHeroes,
   });
 
+  // 3. POLYMORPHISM
+  // Memberikan implementasi spesifik untuk metode getDisplayRole.
   @override
   String getDisplayRole() {
     return "Role: $role";
   }
 }
 
-// Kelas Coach juga mewarisi dari TeamMember.
+// CHILD CLASS lainnya yang juga menggunakan INHERITANCE
 class Coach extends TeamMember {
-  final String joinDate;
+  // Properti joinDate diubah menjadi DateTime agar bisa diformat.
+  final DateTime joinDate;
 
   Coach({
     required super.name,
@@ -55,12 +65,15 @@ class Coach extends TeamMember {
     required super.fullName,
     required super.nationality,
     required super.funFact,
-    required super.achievements, // <-- DITAMBAHKAN DI CONSTRUCTOR
+    required super.achievements,
     required this.joinDate,
   });
 
+  // 3. POLYMORPHISM
+  // Memberikan implementasi yang berbeda untuk metode yang sama.
   @override
   String getDisplayRole() {
     return "Jabatan: Pelatih Utama";
   }
 }
+
