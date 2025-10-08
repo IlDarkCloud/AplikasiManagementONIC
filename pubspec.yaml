@@ -13,11 +13,12 @@ dependencies:
 
   cupertino_icons: ^1.0.8
 
-  # getwidget telah dihapus dari sini untuk mengatasi error
+  # Semua library yang kita butuhkan
   device_info_plus: ^10.1.0
   webview_flutter: ^4.8.0
   shared_preferences: ^2.2.3
   intl: ^0.19.0
+  flutter_rating_bar: ^4.0.1
 
 dev_dependencies:
   flutter_test:
@@ -27,5 +28,7 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+  # Mendaftarkan folder gambar dan folder font
   assets:
     - assets/images/

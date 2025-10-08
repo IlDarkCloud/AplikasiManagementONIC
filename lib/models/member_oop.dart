@@ -1,8 +1,6 @@
 // File ini mendefinisikan struktur data untuk anggota tim menggunakan konsep OOP.
 
-// 1. ABSTRACT CLASS (Kelas Induk)
-// Kelas dasar yang tidak bisa dibuat objeknya secara langsung.
-// Ini adalah contoh ENCAPSULATION, membungkus data-data umum.
+// Kelas dasar abstrak untuk semua anggota tim
 abstract class TeamMember {
   final String name;
   final String ign;
@@ -22,16 +20,15 @@ abstract class TeamMember {
     required this.achievements,
   });
 
-  // Metode abstrak yang WAJIB diimplementasikan oleh kelas anak.
-  // Ini adalah dasar dari POLYMORPHISM.
+  // Metode abstrak untuk Polymorphism
   String getDisplayRole();
 }
 
-// 2. CHILD CLASS (Kelas Anak) - Menggunakan INHERITANCE
-// Kelas Player "mewarisi" semua properti dari TeamMember.
+// Kelas Player mewarisi dari TeamMember dan menambahkan properti rating
 class Player extends TeamMember {
   final String role;
   final List<String> signatureHeroes;
+  final double rating; // <-- PROPERTI BARU DITAMBAHKAN DI SINI
 
   Player({
     required super.name,
@@ -43,19 +40,17 @@ class Player extends TeamMember {
     required super.achievements,
     required this.role,
     required this.signatureHeroes,
+    required this.rating, // <-- DITAMBAHKAN DI CONSTRUCTOR
   });
 
-  // 3. POLYMORPHISM
-  // Memberikan implementasi spesifik untuk metode getDisplayRole.
   @override
   String getDisplayRole() {
     return "Role: $role";
   }
 }
 
-// CHILD CLASS lainnya yang juga menggunakan INHERITANCE
+// Kelas Coach mewarisi dari TeamMember (tanpa properti rating)
 class Coach extends TeamMember {
-  // Properti joinDate diubah menjadi DateTime agar bisa diformat.
   final DateTime joinDate;
 
   Coach({
@@ -69,8 +64,6 @@ class Coach extends TeamMember {
     required this.joinDate,
   });
 
-  // 3. POLYMORPHISM
-  // Memberikan implementasi yang berbeda untuk metode yang sama.
   @override
   String getDisplayRole() {
     return "Jabatan: Pelatih Utama";
