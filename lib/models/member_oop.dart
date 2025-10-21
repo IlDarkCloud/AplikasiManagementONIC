@@ -1,4 +1,4 @@
-// File ini mendefinisikan struktur data untuk anggota tim menggunakan konsep OOP.
+// File ini mendefinisikan struktur data untuk anggota tim dengan konsep OOP.
 
 // Kelas dasar abstrak untuk semua anggota tim
 abstract class TeamMember {
@@ -24,11 +24,12 @@ abstract class TeamMember {
   String getDisplayRole();
 }
 
-// Kelas Player mewarisi dari TeamMember dan menambahkan properti rating
+// Kelas Player mewarisi dari TeamMember dan menambahkan properti harga
 class Player extends TeamMember {
   final String role;
   final List<String> signatureHeroes;
-  final double rating; // <-- PROPERTI BARU DITAMBAHKAN DI SINI
+  final double rating;
+  final int price; // Properti baru untuk harga pemain
 
   Player({
     required super.name,
@@ -40,7 +41,8 @@ class Player extends TeamMember {
     required super.achievements,
     required this.role,
     required this.signatureHeroes,
-    required this.rating, // <-- DITAMBAHKAN DI CONSTRUCTOR
+    required this.rating,
+    required this.price, // Ditambahkan di constructor
   });
 
   @override
@@ -49,7 +51,7 @@ class Player extends TeamMember {
   }
 }
 
-// Kelas Coach mewarisi dari TeamMember (tanpa properti rating)
+// Kelas Coach (tidak memiliki harga karena tidak dijual di marketplace)
 class Coach extends TeamMember {
   final DateTime joinDate;
 
