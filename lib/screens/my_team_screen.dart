@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../providers/team_provider.dart';
-import 'member_detail_screen.dart';
-import '../models/member_oop.dart'; // Pastikan import Player ada
+import 'package:flutter_bloc/flutter_bloc.dart'; // Import library Bloc
+import 'package:go_router/go_router.dart'; // Import go_router
+import '../cubit/team_cubit.dart'; // Import Cubit
+import '../cubit/team_state.dart'; // Import State
+import '../models/member_oop.dart';
+import '../config/app_router.dart'; // Import nama rute
 
 class MyTeamScreen extends StatelessWidget {
   const MyTeamScreen({super.key});
@@ -26,9 +28,8 @@ class MyTeamScreen extends StatelessWidget {
             TextButton(
               child: const Text('Jual', style: TextStyle(color: Colors.redAccent)),
               onPressed: () {
-                // Panggil fungsi sellPlayer dari provider
-                // 'listen: false' penting saat memanggil fungsi di dalam event
-                Provider.of<TeamProvider>(context, listen: false).sellPlayer(player);
+                // 1. Memanggil fungsi Cubit menggunakan context.read()
+                context.read<TeamCubit>().sellPlayer(player);
                 Navigator.of(ctx).pop(); // Tutup dialog
 
                 // Tampilkan notifikasi bahwa pemain berhasil dijual
@@ -53,11 +54,11 @@ class MyTeamScreen extends StatelessWidget {
         title: const Text('Tim Saya'),
         backgroundColor: Colors.black,
       ),
-      // Menggunakan Consumer untuk 'mendengarkan' perubahan di TeamProvider
-      body: Consumer<TeamProvider>(
-        builder: (context, team, child) {
-          // Jika daftar tim kosong, tampilkan pesan
-          if (team.myTeam.isEmpty) {
+      // 2. Mengganti Consumer dengan BlocBuilder
+      body: BlocBuilder<TeamCubit, TeamState>(
+        builder: (context, state) {
+          // 3. Membaca daftar pemain dari 'state.myTeam'
+          if (state.myTeam.isEmpty) {
             return const Center(
               child: Text(
                 'Anda belum membeli pemain.',
@@ -68,9 +69,9 @@ class MyTeamScreen extends StatelessWidget {
 
           // Jika ada pemain, tampilkan dalam ListView
           return ListView.builder(
-            itemCount: team.myTeam.length,
+            itemCount: state.myTeam.length,
             itemBuilder: (context, index) {
-              final player = team.myTeam[index];
+              final player = state.myTeam[index];
               return Card(
                 color: Colors.grey[900],
                 margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -91,12 +92,8 @@ class MyTeamScreen extends StatelessWidget {
                   ),
                   // Aksi saat item di-klik (untuk melihat detail)
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => MemberDetailScreen(member: player),
-                      ),
-                    );
+                    // 4. Navigasi menggunakan go_router
+                    context.push(AppRoutes.playerDetail, extra: player);
                   },
                 ),
               );
@@ -107,4 +104,3 @@ class MyTeamScreen extends StatelessWidget {
     );
   }
 }
-

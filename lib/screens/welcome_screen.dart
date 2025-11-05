@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'home_screen.dart';
+import 'package:go_router/go_router.dart'; // Import go_router
+import '../config/app_router.dart'; // Import file konfigurasi rute
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
@@ -30,9 +31,12 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
 
     // Timer untuk pindah ke halaman utama setelah 3 detik
     Timer(const Duration(seconds: 3), () {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => const HomeScreen()),
-      );
+      if (mounted) {
+        // --- PERUBAHAN NAVIGASI MENGGUNAKAN GO_ROUTER ---
+        // Mengganti Navigator.pushReplacement dengan context.go
+        // Ini akan membersihkan tumpukan navigasi dan pindah ke rute /home
+        context.go(AppRoutes.home);
+      }
     });
   }
 

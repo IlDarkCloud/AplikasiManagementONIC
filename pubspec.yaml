@@ -23,9 +23,17 @@ dependencies:
   # LIBRARY BARU UNTUK STATE MANAGEMENT
   provider: ^6.1.2
 
+  go_router: ^14.2.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+    # Pastikan baris ini ada
+  flutter_bloc: ^8.1.5  # Gunakan versi terbaru jika memungkinkan
+
+    # Pastikan baris ini ada
+  equatable: ^2.0.5   # Gunakan versi terbaru jika memungkinkan
 
   flutter_lints: ^4.0.0
 

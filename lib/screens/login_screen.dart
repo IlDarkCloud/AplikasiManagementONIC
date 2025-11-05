@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'welcome_screen.dart';
+import 'package:go_router/go_router.dart'; // Import go_router
+import '../config/app_router.dart'; // Import file konfigurasi rute
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -33,12 +34,10 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  // Navigasi ke halaman selamat datang
+  // Navigasi ke halaman selamat datang (menggunakan go_router)
   void _navigateToWelcome() {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => const WelcomeScreen()),
-    );
+    // Mengganti Navigator.pushReplacement dengan context.go
+    context.go(AppRoutes.welcome);
   }
 
   // Fungsi untuk menangani login via email
@@ -83,8 +82,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  // --- FUNGSI BARU UNTUK NOTIFIKASI FITUR ---
-  // Fungsi ini akan menampilkan notifikasi informatif (biru keabu-abuan)
+  // Fungsi untuk notifikasi fitur belum tersedia
   void _showFeatureNotAvailableSnackbar() {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -166,7 +164,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ],
                       ),
                       TextButton(
-                        onPressed: _showFeatureNotAvailableSnackbar, // Diubah ke notifikasi
+                        onPressed: _showFeatureNotAvailableSnackbar,
                         child: const Text(
                           "Lupa Password?",
                           style: TextStyle(color: Colors.yellow, fontSize: 14),
@@ -192,11 +190,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // --- PERUBAHAN UTAMA ADA DI SINI ---
-                    // Tombol Google sekarang memanggil notifikasi, bukan login
                     _buildSocialButton(FontAwesomeIcons.google, _showFeatureNotAvailableSnackbar),
                     const SizedBox(width: 20),
-                    // Tombol Apple sekarang memanggil notifikasi, bukan login
                     _buildSocialButton(FontAwesomeIcons.apple, _showFeatureNotAvailableSnackbar),
                   ],
                 ),
@@ -206,7 +201,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   children: [
                     const Text("Belum punya akun?", style: TextStyle(color: Colors.white70)),
                     TextButton(
-                      onPressed: _showFeatureNotAvailableSnackbar, // Diubah ke notifikasi
+                      onPressed: _showFeatureNotAvailableSnackbar,
                       child: const Text("Daftar di sini", style: TextStyle(color: Colors.yellow, fontWeight: FontWeight.bold)),
                     ),
                   ],
@@ -262,4 +257,3 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 }
-

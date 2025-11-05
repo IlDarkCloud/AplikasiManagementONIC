@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart'; // 1. Import library Bloc
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/member_oop.dart';
-import '../providers/team_provider.dart';
+import '../cubit/team_cubit.dart'; // 2. Import Cubit
+import '../cubit/team_state.dart'; // 3. Import State
 
 class MemberDetailScreen extends StatefulWidget {
   final Player member;
@@ -16,6 +17,7 @@ class MemberDetailScreen extends StatefulWidget {
 }
 
 class _MemberDetailScreenState extends State<MemberDetailScreen> {
+  // Logika untuk rating pengguna (State Lokal, tidak perlu Cubit)
   double _userRating = 0.0;
 
   @override
@@ -58,6 +60,7 @@ class _MemberDetailScreenState extends State<MemberDetailScreen> {
     );
   }
 
+  // Layout untuk layar lebar (PC/Browser)
   Widget _buildWideLayout(BuildContext context) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -81,6 +84,7 @@ class _MemberDetailScreenState extends State<MemberDetailScreen> {
     );
   }
 
+  // Layout untuk layar sempit (HP)
   Widget _buildNarrowLayout(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
@@ -100,15 +104,19 @@ class _MemberDetailScreenState extends State<MemberDetailScreen> {
     );
   }
 
+  // Tombol "Beli" di bagian bawah (Diperbarui dengan Cubit)
   Widget _buildBottomNavBar(BuildContext context) {
     final formatCurrency = NumberFormat.currency(locale: 'id_ID', symbol: 'Rp ', decimalDigits: 0);
 
     return Container(
       padding: const EdgeInsets.all(16.0),
       color: Colors.black,
-      child: Consumer<TeamProvider>(
-        builder: (context, team, child) {
-          bool isBought = team.isPlayerBought(widget.member);
+      // 4. Mengganti Consumer dengan BlocBuilder
+      child: BlocBuilder<TeamCubit, TeamState>(
+        builder: (context, state) {
+          // 5. Logika 'isBought' sekarang membaca dari 'state'
+          bool isBought = state.myTeam.contains(widget.member);
+
           return ElevatedButton(
             style: ElevatedButton.styleFrom(
               backgroundColor: isBought ? Colors.grey : Colors.yellow,
@@ -116,9 +124,10 @@ class _MemberDetailScreenState extends State<MemberDetailScreen> {
               padding: const EdgeInsets.symmetric(vertical: 16),
             ),
             onPressed: isBought
-                ? null
+                ? null // Tombol mati jika sudah dibeli
                 : () {
-              team.buyPlayer(widget.member);
+              // 6. Memanggil fungsi Cubit menggunakan context.read()
+              context.read<TeamCubit>().buyPlayer(widget.member);
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text('${widget.member.name} berhasil ditambahkan ke Tim Saya!'),
@@ -136,6 +145,7 @@ class _MemberDetailScreenState extends State<MemberDetailScreen> {
     );
   }
 
+  // Konten detail biodata (tidak ada perubahan di sini)
   Widget _buildDetailsContent(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -144,7 +154,6 @@ class _MemberDetailScreenState extends State<MemberDetailScreen> {
         Text(widget.member.getDisplayRole(), style: const TextStyle(fontSize: 20, fontStyle: FontStyle.italic, color: Colors.white70)),
         const SizedBox(height: 20),
 
-        // --- FITUR RATING DITAMBAHKAN DI SINI ---
         const Text('Rating Komunitas:', style: TextStyle(color: Colors.white70)),
         RatingBarIndicator(
           rating: widget.member.rating,
@@ -165,7 +174,6 @@ class _MemberDetailScreenState extends State<MemberDetailScreen> {
           children: widget.member.achievements.map((achievement) => _buildAchievementItem(achievement)).toList(),
         ),
 
-        // --- RATING INTERAKTIF DITAMBAHKAN DI SINI ---
         const SizedBox(height: 20),
         const Divider(color: Colors.yellow),
         const SizedBox(height: 10),
@@ -235,4 +243,3 @@ class _MemberDetailScreenState extends State<MemberDetailScreen> {
     );
   }
 }
-

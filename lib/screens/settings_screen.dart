@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../providers/team_provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart'; // 1. Import library Bloc
+import '../cubit/team_cubit.dart'; // 2. Import Cubit
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
 
+  // Fungsi untuk menampilkan dialog konfirmasi
   void _showClearTeamConfirmation(BuildContext context) {
     showDialog(
       context: context,
@@ -22,7 +23,8 @@ class SettingsScreen extends StatelessWidget {
           ),
           TextButton(
             onPressed: () {
-              Provider.of<TeamProvider>(context, listen: false).clearTeam();
+              // 3. Mengganti Provider.of dengan context.read<TeamCubit>()
+              context.read<TeamCubit>().clearTeam();
               Navigator.of(ctx).pop();
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
@@ -45,6 +47,8 @@ class SettingsScreen extends StatelessWidget {
         title: const Text('Pengaturan'),
         backgroundColor: Colors.black,
       ),
+      // Bagian UI ini tidak perlu 'mendengarkan' state,
+      // jadi kita tidak perlu BlocBuilder di sini.
       body: ListView(
         padding: const EdgeInsets.all(16.0),
         children: [
@@ -52,6 +56,7 @@ class SettingsScreen extends StatelessWidget {
             leading: const Icon(Icons.delete_forever, color: Colors.redAccent),
             title: const Text('Hapus Tim Saya', style: TextStyle(color: Colors.white)),
             subtitle: const Text('Jual semua pemain yang sudah Anda beli.', style: TextStyle(color: Colors.white70)),
+            // Saat di-tap, panggil fungsi dialog
             onTap: () => _showClearTeamConfirmation(context),
           ),
         ],

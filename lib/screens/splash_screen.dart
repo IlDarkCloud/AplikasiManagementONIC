@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'login_screen.dart';
+import 'package:go_router/go_router.dart'; // Import go_router
+import '../config/app_router.dart'; // Import file konfigurasi rute
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -40,15 +41,10 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     // Timer untuk navigasi ke halaman login setelah 3.5 detik
     Timer(const Duration(milliseconds: 3500), () {
       if (mounted) {
-        Navigator.of(context).pushReplacement(
-          PageRouteBuilder(
-            pageBuilder: (context, animation, secondaryAnimation) => const LoginScreen(),
-            transitionsBuilder: (context, animation, secondaryAnimation, child) {
-              return FadeTransition(opacity: animation, child: child);
-            },
-            transitionDuration: const Duration(milliseconds: 500),
-          ),
-        );
+        // --- PERUBAHAN NAVIGASI MENGGUNAKAN GO_ROUTER ---
+        // Mengganti Navigator.pushReplacement dengan context.go
+        // Ini akan membersihkan tumpukan navigasi dan pindah ke rute login
+        context.go(AppRoutes.login);
       }
     });
   }

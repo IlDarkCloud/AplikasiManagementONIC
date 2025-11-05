@@ -1,19 +1,28 @@
 import 'package:flutter/material.dart';
-import 'marketplace_screen.dart';
-import 'my_team_screen.dart';
-import 'splash_screen.dart';
-import 'history_screen.dart';
-import 'settings_screen.dart';
-import 'search_screen.dart';
+import 'package:go_router/go_router.dart'; // Import go_router
+import '../config/app_router.dart'; // Import file konfigurasi rute
+
+// Import halaman-halaman lain tidak lagi diperlukan di sini
+// karena navigasi ditangani oleh router.
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
+
+  // Fungsi untuk menampilkan notifikasi fitur belum tersedia
+  void _showFeatureNotAvailable(BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Fitur ini belum tersedia'),
+        backgroundColor: Colors.blueGrey,
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false,
+        automaticallyImplyLeading: false, // Menghilangkan tombol kembali
         title: Image.asset('assets/images/onic_logo.png', height: 40),
         centerTitle: true,
         backgroundColor: Colors.black,
@@ -22,15 +31,13 @@ class HomeScreen extends StatelessWidget {
             icon: const Icon(Icons.logout, color: Colors.yellow),
             tooltip: 'Logout',
             onPressed: () {
-              Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (context) => const SplashScreen()),
-                    (Route<dynamic> route) => false,
-              );
+              // --- PERUBAHAN NAVIGASI GO_ROUTER ---
+              // Mengganti tumpukan navigasi kembali ke splash screen
+              context.go(AppRoutes.splash);
             },
           ),
         ],
       ),
-      // MENGEMBALIKAN SingleChildScrollView
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -55,7 +62,9 @@ class HomeScreen extends StatelessWidget {
             TextField(
               readOnly: true,
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const SearchScreen()));
+                // --- PERUBAHAN NAVIGASI GO_ROUTER ---
+                // Mendorong (push) halaman pencarian di atas halaman ini
+                context.push(AppRoutes.search);
               },
               decoration: InputDecoration(
                 hintText: 'Cari pemain...',
@@ -84,7 +93,8 @@ class HomeScreen extends StatelessWidget {
                   icon: Icons.storefront,
                   title: 'Bursa Transfer',
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const MarketplaceScreen()));
+                    // --- PERUBAHAN NAVIGASI GO_ROUTER ---
+                    context.push(AppRoutes.marketplace);
                   },
                 ),
                 _buildMenuCard(
@@ -92,7 +102,8 @@ class HomeScreen extends StatelessWidget {
                   icon: Icons.shield,
                   title: 'Tim Saya',
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const MyTeamScreen()));
+                    // --- PERUBAHAN NAVIGASI GO_ROUTER ---
+                    context.push(AppRoutes.myTeam);
                   },
                 ),
                 _buildMenuCard(
@@ -100,7 +111,8 @@ class HomeScreen extends StatelessWidget {
                   icon: Icons.history,
                   title: 'Riwayat',
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const HistoryScreen()));
+                    // --- PERUBAHAN NAVIGASI GO_ROUTER ---
+                    context.push(AppRoutes.history);
                   },
                 ),
                 _buildMenuCard(
@@ -108,7 +120,8 @@ class HomeScreen extends StatelessWidget {
                   icon: Icons.settings,
                   title: 'Pengaturan',
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const SettingsScreen()));
+                    // --- PERUBAHAN NAVIGASI GO_ROUTER ---
+                    context.push(AppRoutes.settings);
                   },
                 ),
               ],
@@ -151,4 +164,3 @@ class HomeScreen extends StatelessWidget {
     );
   }
 }
-

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:go_router/go_router.dart'; // Import go_router
+import '../config/app_router.dart'; // Import file konfigurasi rute
 import '../data/onic_data.dart';
-import 'member_detail_screen.dart';
+// import 'member_detail_screen.dart'; // Tidak lagi diperlukan di sini
 
 class MarketplaceScreen extends StatelessWidget {
   const MarketplaceScreen({super.key});
@@ -15,6 +17,7 @@ class MarketplaceScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Bursa Transfer'),
         backgroundColor: Colors.black,
+        // go_router akan otomatis menambahkan tombol kembali di sini
       ),
       body: ListView.builder(
         itemCount: playersForSale.length,
@@ -44,13 +47,9 @@ class MarketplaceScreen extends StatelessWidget {
               ),
               trailing: const Icon(Icons.chevron_right, color: Colors.yellow),
               onTap: () {
-                // Pindah ke halaman detail pemain saat di-klik
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => MemberDetailScreen(member: player),
-                  ),
-                );
+                // --- PERUBAHAN NAVIGASI MENGGUNAKAN GO_ROUTER ---
+                // Pindah ke halaman detail dan mengirim objek 'player' sebagai data 'extra'
+                context.push(AppRoutes.playerDetail, extra: player);
               },
             ),
           );
@@ -59,4 +58,3 @@ class MarketplaceScreen extends StatelessWidget {
     );
   }
 }
-

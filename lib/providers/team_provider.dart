@@ -1,55 +1,38 @@
 import 'package:flutter/material.dart';
-import '../models/member_oop.dart';
 
-// Model sederhana untuk mencatat transaksi
-enum TransactionType { bought, sold }
-
-class Transaction {
-  final Player player;
-  final TransactionType type;
-  final DateTime timestamp;
-
-  Transaction({required this.player, required this.type, required this.timestamp});
-
-  // Helper untuk mengubah enum menjadi teks
-  String get typeAsString => type == TransactionType.bought ? 'Beli' : 'Jual';
-}
-
-
+// 1. Definisikan class provider Anda
+// 'with ChangeNotifier' memberitahu Flutter untuk "mendengarkan" perubahan di class ini.
 class TeamProvider with ChangeNotifier {
-  final List<Player> _myTeam = [];
-  final List<Transaction> _history = []; // Daftar baru untuk menyimpan riwayat
 
-  List<Player> get myTeam => _myTeam;
-  List<Transaction> get history => List.unmodifiable(_history.reversed); // Getter untuk riwayat (dibalik agar terbaru di atas)
+  // --- CONTOH DATA ---
+  // Anda bisa menyimpan data apa pun di sini.
+  // Misalnya, daftar nama tim.
+  List<String> _teams = [
+    'Team A',
+    'Team B',
+    'Team C',
+  ];
 
-  void buyPlayer(Player player) {
-    if (!_myTeam.contains(player)) {
-      _myTeam.add(player);
-      // Mencatat transaksi pembelian
-      _history.add(Transaction(player: player, type: TransactionType.bought, timestamp: DateTime.now()));
-      notifyListeners();
-    }
-  }
+  // --- CONTOH GETTER ---
+  // Ini adalah cara agar widget Anda bisa "membaca" data.
+  List<String> get teams => _teams;
 
-  void sellPlayer(Player player) {
-    if (_myTeam.contains(player)) {
-      _myTeam.remove(player);
-      // Mencatat transaksi penjualan
-      _history.add(Transaction(player: player, type: TransactionType.sold, timestamp: DateTime.now()));
-      notifyListeners();
-    }
-  }
+  // --- CONTOH METHOD UNTUK MENGUBAH DATA ---
+  // Ini adalah cara untuk "mengubah" data dari UI.
+  void addTeam(String teamName) {
+    _teams.add(teamName);
 
-  // Fungsi baru untuk menghapus semua pemain dari tim
-  void clearTeam() {
-    _myTeam.clear();
-    // Kita bisa juga menambahkan log ke riwayat jika perlu
+    // 2. Panggil notifyListeners()
+    // Ini adalah bagian terpentING!
+    // Ini memberitahu semua widget yang mendengarkan bahwa data telah berubah
+    // dan mereka harus membangun ulang (refresh) tampilan.
     notifyListeners();
   }
 
-  bool isPlayerBought(Player player) {
-    return _myTeam.contains(player);
+  void removeTeam(String teamName) {
+    _teams.remove(teamName);
+    notifyListeners();
   }
-}
 
+// Anda bisa menambahkan logika lain di sini (misalnya, loading data dari API)
+}

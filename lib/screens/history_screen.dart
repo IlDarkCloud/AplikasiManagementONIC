@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
-import '../providers/team_provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart'; // 1. Import library Bloc
+import '../cubit/team_cubit.dart'; // 2. Import Cubit
+import '../cubit/team_state.dart'; // 3. Import State
 
 class HistoryScreen extends StatelessWidget {
   const HistoryScreen({super.key});
@@ -13,9 +14,14 @@ class HistoryScreen extends StatelessWidget {
         title: const Text('Riwayat Transaksi'),
         backgroundColor: Colors.black,
       ),
-      body: Consumer<TeamProvider>(
-        builder: (context, team, child) {
-          if (team.history.isEmpty) {
+      // 4. Mengganti Consumer dengan BlocBuilder
+      body: BlocBuilder<TeamCubit, TeamState>(
+        builder: (context, state) {
+          // 5. Membaca daftar riwayat dari 'state'
+          // Kita .reversed.toList() di sini agar yang terbaru tampil di atas
+          final historyList = state.history.reversed.toList();
+
+          if (historyList.isEmpty) {
             return const Center(
               child: Text(
                 'Belum ada transaksi.',
@@ -25,9 +31,9 @@ class HistoryScreen extends StatelessWidget {
           }
 
           return ListView.builder(
-            itemCount: team.history.length,
+            itemCount: historyList.length,
             itemBuilder: (context, index) {
-              final transaction = team.history[index];
+              final transaction = historyList[index];
               final isBought = transaction.type == TransactionType.bought;
               final formatTime = DateFormat('d MMM yyyy, HH:mm', 'id_ID');
 
@@ -39,6 +45,7 @@ class HistoryScreen extends StatelessWidget {
                     backgroundImage: AssetImage(transaction.player.imagePath),
                   ),
                   title: Text(
+                    // 'typeAsString' berasal dari model 'Transaction' di team_state.dart
                     '${transaction.typeAsString}: ${transaction.player.name}',
                     style: TextStyle(
                       color: isBought ? Colors.greenAccent : Colors.redAccent,
